@@ -4,48 +4,53 @@ import { questions } from './QuestionList'
 
 function App() {
 
-const[showfinalresults, setfinalresults] = useState(false);
+const[showresults, setresults] = useState(false);
 const[score, setScore] = useState(0);
 const[currentQ, setCurrentQ] = useState(0);
+/* these allow us to dynamically change the status of
+the final results, score, and the # of question we are on (stats)
+with useState and the initial condition set */
 
-const optionClicked = (isCorrect) => {
+/* if the answer we click is correct, increment score by 1 */
+const ansClicked = (isCorrect) => {
   if (isCorrect) {
     setScore(score + 1);
   }
 
+  /* checks if we have reached the end of the q's and should show the final score */
   if (currentQ + 1 < questions.length) {
     setCurrentQ(currentQ + 1);
   } else {
-    setfinalresults(true);
+    setresults(true);
   }
 };
 
-/* Resets the game back to default */
+/* resets our stats to start conditions again */
 const restartGame = () => {
   setScore(0);
   setCurrentQ(0);
-  setfinalresults(false);
+  setresults(false);
 };
 
   return (
+    /* Quiz Information Layout */
     <div className="App">
      <h1>QuizBowl Practice Test</h1>
-
-     {/*2. Current Score*/ }
      <h2>Current Score : {score}</h2>
 
-     {showfinalresults ?
+    {/* checks if we should show results or not based on condition */}
+     {showresults ?
 
-     /*3. Final Results*/
+     /* Final Results Layout */
      <div className = 'finalResults'>
-     <h1> Final Results!!! </h1>
+     <h1> !!! Final Results !!! </h1>
      <h2> {score} out of {questions.length} correct! </h2>
-     <button onClick = {() => restartGame()}>Practice Again </button>
+     <button onClick = {() => restartGame()}> Try Again </button>
     </div>
     
     :
 
-     /*3. Question*/
+     /* Question Card Layout */
      <div className = 'questions'>
       <h2>Question {currentQ + 1} of {questions.length} 
       {" ---- " + questions[currentQ].title}
@@ -58,8 +63,7 @@ const restartGame = () => {
               return (
                 <li className = "options"
                   key={option.id}
-                  onClick={() => optionClicked(option.isCorrect)}
-                  /*Needs to be here to refrain from printing this as text ^ */
+                  onClick={() => ansClicked(option.isCorrect)}
                 >
                   {option.text}
                 </li>
@@ -68,7 +72,6 @@ const restartGame = () => {
           </ul>
      </div>
     }
-
   </div>
   );
 }
